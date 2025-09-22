@@ -9,26 +9,51 @@ static void print_line(GtkWidget *widget, gpointer data) {
   g_print("My first GTK project is currently running\n");
 }
 
+static void update_system_cmd(GtkWidget *widget, gpointer data) {
+  g_print("updating your system\n");
+  system("sudo pacman -Syu --noconfirm");
+}
+
+static void install_vim_cmd(GtkWidget *widget, gpointer data) {
+  g_print("Installing vim\n");
+  system("sudo pacman -S --noconfirm vim");
+}
+
+static void uninstall_vim_cmd(GtkWidget *widget, gpointer data) {
+  g_print("Uninstalling vim\n");
+  system("sudo pacman -R --noconfirm vim");
+}
+
 static void activate(GtkApplication *app, gpointer user_data) {
   GtkWidget *window;
   GtkWidget *box;
   GtkWidget *button;
   GtkWidget *sec_button;
+  GtkWidget *update_button;
+  GtkWidget *install_vim_button;
+  GtkWidget *uninstall_vim_button;
 
   window = gtk_application_window_new(app);
-  gtk_window_set_title(GTK_WINDOW(window), "Hello");
-  gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
+  gtk_window_set_title(GTK_WINDOW(window), "TERMINAL INSTALLER APP");
+  gtk_window_set_default_size(GTK_WINDOW(window), 1200, 800);
 
-  box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 20);
+  box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 20);
   gtk_window_set_child(GTK_WINDOW(window), box);
 
-  button = gtk_button_new_with_label("Hello World");
-  g_signal_connect(button, "clicked", G_CALLBACK(print_hello), NULL);
-  gtk_box_append(GTK_BOX(box), button);
+  update_button = gtk_button_new_with_label("SYSTEM UPDATE");
+  g_signal_connect(update_button, "clicked", G_CALLBACK(update_system_cmd),
+                   NULL);
+  gtk_box_append(GTK_BOX(box), update_button);
 
-  sec_button = gtk_button_new_with_label("My first GTK project");
-  g_signal_connect(sec_button, "clicked", G_CALLBACK(print_line), NULL);
-  gtk_box_append(GTK_BOX(box), sec_button);
+  install_vim_button = gtk_button_new_with_label("INSTALL VIM");
+  g_signal_connect(install_vim_button, "clicked", G_CALLBACK(install_vim_cmd),
+                   NULL);
+  gtk_box_append(GTK_BOX(box), install_vim_button);
+
+  uninstall_vim_button = gtk_button_new_with_label("UNINSTALL VIM");
+  g_signal_connect(uninstall_vim_button, "clicked",
+                   G_CALLBACK(uninstall_vim_cmd), NULL);
+  gtk_box_append(GTK_BOX(box), uninstall_vim_button);
 
   gtk_window_present(GTK_WINDOW(window));
 }
